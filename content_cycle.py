@@ -131,9 +131,10 @@ def update_stage(contents):
     new_stage = STAGES[choice - 1]
     item["stage"] = new_stage
     item["updated_at"] = now()
-    item["published_at"] = (
-        item["updated_at"] if new_stage in PUBLISHED_STAGES else None
-    )
+    if new_stage in PUBLISHED_STAGES:
+        item["published_at"] = item.get("published_at") or item["updated_at"]
+    else:
+        item["published_at"] = None
 
     save_contents(contents)
     print(f"تم تحديث مرحلة «{item['title']}» إلى: {new_stage}")
